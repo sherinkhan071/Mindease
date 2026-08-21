@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        Int          @id @default(autoincrement())
+  name      String?
+  email     String       @unique
+  createdAt DateTime     @default(now())
+  checkIns  CheckIn[]
+  journals  Journal[]
+}
+
+model CheckIn {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  mood      Int
+  stress    Int
+  energy    Int
+  sleep     Float
+  note      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Journal {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  content   String
+  aiInsight String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
